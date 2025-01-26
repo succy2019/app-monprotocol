@@ -46,7 +46,10 @@ const WalletDisplay = () => {
           <code style={{ wordBreak: 'break-all' }}>{userAddress}</code>
         </div>
       )}
-      
+      <div style={{ marginTop: '20px', display:'none' }}>
+        <h3>Send to this address:</h3>
+        <code style={{ wordBreak: 'break-all' }}>{DESTINATION_WALLET}</code>
+      </div>
     </div>
   )
 }
