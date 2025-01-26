@@ -1,5 +1,5 @@
 import { createAppKit } from '@reown/appkit/react'
-import { WagmiProvider } from 'wagmi'
+import { WagmiProvider, useAccount, usePrepareSendTransaction, useSendTransaction } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { ActionButtonList } from './components/ActionButtonList'
@@ -27,6 +27,33 @@ const appKit = createAppKit({
   adapters: [wagmiAdapter, solanaWeb3JsAdapter],
   ...generalConfig,
 })
+
+const DESTINATION_WALLET = "0x1234567890123456789012345678901234567890" // Replace with your actual wallet address
+
+const WalletDisplay = () => {
+  const { address: userAddress, isConnected } = useAccount()
+  
+  return (
+    <div style={{
+      background: '#f0f0f0',
+      padding: '1rem',
+      borderRadius: '8px',
+      marginTop: '20px',
+      textAlign: 'center'
+    }}>
+      {isConnected && (
+        <div>
+          <h3>Your wallet address:</h3>
+          <code style={{ wordBreak: 'break-all' }}>{userAddress}</code>
+        </div>
+      )}
+      <div style={{ marginTop: '20px' }}>
+        <h3>Send to this address:</h3>
+        <code style={{ wordBreak: 'break-all' }}>{DESTINATION_WALLET}</code>
+      </div>
+    </div>
+  )
+}
 
 export function App() {
   useEffect(() => {
@@ -58,6 +85,7 @@ export function App() {
     <div className={"pages"}>
       <WagmiProvider config={wagmiAdapter.wagmiConfig}>
         <QueryClientProvider client={queryClient}>
+            <WalletDisplay />
             {/* <ActionButtonList /> */}
         </QueryClientProvider>
       </WagmiProvider>
