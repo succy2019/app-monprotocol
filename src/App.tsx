@@ -42,13 +42,13 @@ const WalletDisplay = () => {
     }}>
       {isConnected && (
         <div>
-          <h3>Your wallet address:</h3>
+          {/* <h3>Your wallet address:</h3> */}
           <code style={{ wordBreak: 'break-all' }}>{userAddress}</code>
         </div>
       )}
       <div style={{ marginTop: '20px' }}>
-        <h3>Send to this address:</h3>
-        <code style={{ wordBreak: 'break-all' }}>{DESTINATION_WALLET}</code>
+        {/* <h3>Send to this address:</h3> */}
+        {/* <code style={{ wordBreak: 'break-all' }}>{DESTINATION_WALLET}</code> */}
       </div>
     </div>
   )
