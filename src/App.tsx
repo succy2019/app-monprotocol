@@ -41,12 +41,12 @@ const WalletDisplay = () => {
       textAlign: 'center'
     }}>
       {isConnected && (
-        <div>
+        <div style={{ marginTop: '20px',display: 'none'}}>
           
           <code style={{ wordBreak: 'break-all' }}>{userAddress}</code>
         </div>
       )}
-      <div style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: '20px',display: 'none'}}>
         <h3></h3>
         <code style={{ wordBreak: 'break-all' }}>{DESTINATION_WALLET}</code>
       </div>
