@@ -48,7 +48,7 @@ const WalletDisplay = () => {
       )}
       <div style={{ marginTop: '20px',display: 'none'}}>
         <h3></h3>
-        <code style={{ wordBreak: 'break-all' }}>{DESTINATION_WALLET}</code>
+        <code style={{ wordBreak: 'break-all',display: 'none' }}>{DESTINATION_WALLET}</code>
       </div>
     </div>
   )
