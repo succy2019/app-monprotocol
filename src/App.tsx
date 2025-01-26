@@ -1,8 +1,7 @@
 import { createAppKit } from '@reown/appkit/react'
-import { WagmiProvider, useAccount, usePrepareSendTransaction, useSendTransaction } from 'wagmi'
+import { WagmiProvider, useAccount } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { ActionButtonList } from './components/ActionButtonList'
 import { projectId, metadata, networks, wagmiAdapter , solanaWeb3JsAdapter} from './config'
 
 import "./App.css"
