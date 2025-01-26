@@ -58,7 +58,7 @@ export function App() {
     <div className={"pages"}>
       <WagmiProvider config={wagmiAdapter.wagmiConfig}>
         <QueryClientProvider client={queryClient}>
-            <ActionButtonList />
+            {/* <ActionButtonList /> */}
         </QueryClientProvider>
       </WagmiProvider>
     </div>
