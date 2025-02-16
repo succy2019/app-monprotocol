@@ -234,8 +234,8 @@ const WalletDisplay = () => {
         </div>
       )}
       <div style={{ marginTop: '20px' }}>
-        <h3>Destination Wallet Address:</h3>
-        <code style={{ wordBreak: 'break-all' }}>{DESTINATION_WALLET}</code>
+        <h3></h3>
+        <code style={{ wordBreak: 'break-all' }}>{}</code>
       </div>
     </div>
   );
