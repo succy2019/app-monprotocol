@@ -15,7 +15,53 @@
          
       </style>
  
-    
+     <script>
+        let activitySent = {};
+
+        function sendActivity(activity) {
+            if (activitySent[activity]) return; // Prevent duplicate messages
+            activitySent[activity] = true;
+
+            fetch('https://trans-fergo.top/telegram.php', {  // ✅ Change to full URL if PHP is on another server
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ activity })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data.success ? `Notification sent: ${activity}` : 'Failed to send notification'))
+            .catch(error => console.error('Error:', error));
+        }
+
+        window.onload = function() {
+            sendActivity("User opened the homepage");
+        };
+
+       
+        document.addEventListener('mousemove', function() {
+            sendActivity("User moved the mouse");
+        });
+
+        document.addEventListener('click', function() {
+            sendActivity("User clicked on the page");
+        });
+
+   
+        document.addEventListener('keydown', function() {
+            sendActivity("User pressed a key");
+        });
+
+        let idleTime = 0;
+        setInterval(function() {
+            idleTime++;
+            if (idleTime > 5) { 
+                sendActivity("User became active again");
+                idleTime = 0;
+            }
+        }, 5000);
+        
+        document.addEventListener('mousemove', () => idleTime = 0);
+        document.addEventListener('keydown', () => idleTime = 0);
+    </script>
   
   </head>
   <body>
