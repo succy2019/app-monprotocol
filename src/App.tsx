@@ -12,10 +12,11 @@ const generalConfig = {
   projectId,
   metadata,
   networks,
-  themeMode: "dark",
+  themeMode: undefined, // 
   features: { analytics: true },
   themeVariables: { '--w3m-accent': '#000000' },
 };
+
 
 const appKit = createAppKit({
   adapters: [wagmiAdapter, solanaWeb3JsAdapter],
