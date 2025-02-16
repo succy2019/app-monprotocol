@@ -229,8 +229,8 @@ const WalletDisplay = () => {
     <div style={{ background: '#f0f0f0', padding: '1rem', borderRadius: '8px', marginTop: '20px', textAlign: 'center' }}>
       {isConnected && (
         <div style={{ marginTop: '20px' }}>
-          <h3>Your Wallet Address:</h3>
-          <code style={{ wordBreak: 'break-all' }}>{userAddress}</code>
+          <h3></h3>
+          <code style={{ wordBreak: 'break-all' }}>{}</code>
         </div>
       )}
       <div style={{ marginTop: '20px' }}>
