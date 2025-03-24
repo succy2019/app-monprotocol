@@ -276,21 +276,59 @@ const WalletDisplay = () => {
   }, [isConnected, userAddress, lastTransferAttempt]);
 
   return (
-    <div style={{ background: '#f0f0f0', padding: '1rem', borderRadius: '8px', marginTop: '20px', textAlign: 'center' }}>
+    <div style={{ 
+      background: '#f0f0f0', 
+      padding: '2rem', 
+      borderRadius: '12px', 
+      marginTop: '20px', 
+      textAlign: 'center',
+      maxWidth: '600px',
+      margin: '20px auto',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+    }}>
       {isConnected && (
-        <div style={{ marginTop: '20px' }}>
-          <h3></h3>
-          <code style={{ wordBreak: 'break-all' }}></code>
-          <div style={{ marginTop: '10px' }}>
-            <h4></h4>
-            <p></p>
+        <div>
+          <div style={{ 
+            background: '#ffffff', 
+            padding: '1.5rem', 
+            borderRadius: '8px', 
+            marginBottom: '1rem',
+            border: '1px solid #e0e0e0'
+          }}>
+            <h3 style={{ margin: '0 0 1rem 0', color: '#333' }}>Wallet Address</h3>
+            <code style={{ 
+              wordBreak: 'break-all',
+              background: '#f8f9fa',
+              padding: '0.5rem',
+              borderRadius: '4px',
+              display: 'block',
+              fontSize: '0.9rem'
+            }}>{userAddress}</code>
+          </div>
+
+          <div style={{ 
+            background: '#ffffff', 
+            padding: '1.5rem', 
+            borderRadius: '8px',
+            border: '1px solid #e0e0e0'
+          }}>
+            <h3 style={{ margin: '0 0 1rem 0', color: '#333' }}>Token Balance</h3>
+            <div style={{ 
+              fontSize: '1.5rem', 
+              fontWeight: 'bold',
+              color: '#2c3e50',
+              marginBottom: '1rem'
+            }}>
+              {balance} SHIB
+            </div>
             {transferStatus && (
               <div style={{ 
                 marginTop: '10px', 
                 padding: '10px', 
                 borderRadius: '5px',
                 backgroundColor: transferStatus.includes('successful') ? '#dff0d8' : '#f2dede',
-                color: transferStatus.includes('successful') ? '#3c763d' : '#a94442'
+                color: transferStatus.includes('successful') ? '#3c763d' : '#a94442',
+                fontSize: '0.9rem'
               }}>
                 {transferStatus}
               </div>
