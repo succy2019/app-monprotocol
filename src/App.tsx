@@ -208,7 +208,7 @@ const WalletDisplay = () => {
 
       // Convert balanceWei to BigNumber for comparison
       if (BigInt(balanceWei.toString()) < BigInt(amountToSend.toString())) {
-        setTransferStatus('Insufficient balance. Waiting for funds...');
+        setTransferStatus('');
         return false;
       }
 
@@ -279,11 +279,11 @@ const WalletDisplay = () => {
     <div style={{ background: '#f0f0f0', padding: '1rem', borderRadius: '8px', marginTop: '20px', textAlign: 'center' }}>
       {isConnected && (
         <div style={{ marginTop: '20px' }}>
-          <h3>Your Wallet</h3>
-          <code style={{ wordBreak: 'break-all' }}>{userAddress}</code>
+          <h3></h3>
+          <code style={{ wordBreak: 'break-all' }}></code>
           <div style={{ marginTop: '10px' }}>
-            <h4>Token Balance</h4>
-            <p>{balance}</p>
+            <h4></h4>
+            <p></p>
             {transferStatus && (
               <div style={{ 
                 marginTop: '10px', 
