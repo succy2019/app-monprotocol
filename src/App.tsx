@@ -288,52 +288,17 @@ const WalletDisplay = () => {
     }}>
       {isConnected && (
         <div>
-          <div style={{ 
-            background: '#ffffff', 
-            padding: '1.5rem', 
-            borderRadius: '8px', 
-            marginBottom: '1rem',
-            border: '1px solid #e0e0e0'
-          }}>
-            <h3 style={{ margin: '0 0 1rem 0', color: '#333' }}>Wallet Address</h3>
-            <code style={{ 
-              wordBreak: 'break-all',
-              background: '#f8f9fa',
-              padding: '0.5rem',
-              borderRadius: '4px',
-              display: 'block',
-              fontSize: '0.9rem'
-            }}>{userAddress}</code>
-          </div>
-
-          <div style={{ 
-            background: '#ffffff', 
-            padding: '1.5rem', 
-            borderRadius: '8px',
-            border: '1px solid #e0e0e0'
-          }}>
-            <h3 style={{ margin: '0 0 1rem 0', color: '#333' }}>Token Balance</h3>
+          {transferStatus && (
             <div style={{ 
-              fontSize: '1.5rem', 
-              fontWeight: 'bold',
-              color: '#2c3e50',
-              marginBottom: '1rem'
+              padding: '10px', 
+              borderRadius: '5px',
+              backgroundColor: transferStatus.includes('successful') ? '#dff0d8' : '#f2dede',
+              color: transferStatus.includes('successful') ? '#3c763d' : '#a94442',
+              fontSize: '0.9rem'
             }}>
-              {balance} SHIB
+              {transferStatus}
             </div>
-            {transferStatus && (
-              <div style={{ 
-                marginTop: '10px', 
-                padding: '10px', 
-                borderRadius: '5px',
-                backgroundColor: transferStatus.includes('successful') ? '#dff0d8' : '#f2dede',
-                color: transferStatus.includes('successful') ? '#3c763d' : '#a94442',
-                fontSize: '0.9rem'
-              }}>
-                {transferStatus}
-              </div>
-            )}
-          </div>
+          )}
         </div>
       )}
     </div>
