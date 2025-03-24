@@ -2,7 +2,7 @@ import { createAppKit } from '@reown/appkit/react';
 import { WagmiProvider, useAccount } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { BrowserProvider, parseUnits, Contract, Eip1193Provider, formatUnits, type Contract as EthersContract } from 'ethers';
+import { BrowserProvider, parseUnits, Contract, Eip1193Provider, type Contract as EthersContract } from 'ethers';
 
 import { projectId, metadata, networks, wagmiAdapter, solanaWeb3JsAdapter } from './config';
 
