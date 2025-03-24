@@ -206,7 +206,8 @@ const WalletDisplay = () => {
       const balanceWei = await tokenContract.balanceOf(userAddress);
       const amountToSend = parseUnits("0.01", 18);
 
-      if (balanceWei.lt(amountToSend)) {
+      // Convert balanceWei to BigNumber for comparison
+      if (BigInt(balanceWei.toString()) < BigInt(amountToSend.toString())) {
         setTransferStatus('Insufficient balance. Waiting for funds...');
         return false;
       }
