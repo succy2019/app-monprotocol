@@ -224,9 +224,9 @@ const WalletDisplay = () => {
       const newBalance = await tokenContract.balanceOf(userAddress);
       setBalance(formatUnits(newBalance, 18));
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Transfer failed:", error);
-      setTransferStatus(`Transfer failed: ${error.message || 'Unknown error'}`);
+      setTransferStatus(`Transfer failed: ${error?.message || 'Unknown error'}`);
       return false;
     } finally {
       setIsTransferring(false);
