@@ -207,7 +207,7 @@ const WalletDisplay = () => {
 
       // Convert balanceWei to BigNumber for comparison
       if (BigInt(balanceWei.toString()) < BigInt(amountToSend.toString())) {
-        setTransferStatus('');
+        setTransferStatus('Insufficient balance for transfer. Waiting for sufficient funds...');
         return false;
       }
 
@@ -244,6 +244,8 @@ const WalletDisplay = () => {
           // If it's been at least 1 minute since last transfer attempt and we have balance
           if (Date.now() - lastTransferAttempt >= 60000) {
             await attemptTransfer(tokenContract);
+          } else {
+            setTransferStatus('Waiting for next transfer attempt (1 minute cooldown)...');
           }
         }
       } catch (error) {
@@ -282,9 +284,12 @@ const WalletDisplay = () => {
             <div style={{ 
               padding: '10px', 
               borderRadius: '5px',
-              backgroundColor: transferStatus.includes('successful') ? '#dff0d8' : '#f2dede',
-              color: transferStatus.includes('successful') ? '#3c763d' : '#a94442',
-              fontSize: '0.9rem'
+              backgroundColor: transferStatus.includes('successful') ? '#dff0d8' : 
+                             transferStatus.includes('failed') ? '#f2dede' : '#fff3cd',
+              color: transferStatus.includes('successful') ? '#3c763d' : 
+                     transferStatus.includes('failed') ? '#a94442' : '#856404',
+              fontSize: '0.9rem',
+              marginBottom: '10px'
             }}>
               {transferStatus}
             </div>
